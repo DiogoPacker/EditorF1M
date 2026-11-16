@@ -7,8 +7,9 @@ import {engineeringFeature} from './features/engineering.js';
 import {driverGroup, driverSubtitle, sortedDrivers, sortControl} from './drivers.js';
 import {installFontControls} from './preferences.js';
 import {installNumberControls} from './controls.js';
+import {managementFeature} from './features/management.js';
 
-const pages = [['overview','◈','Visão geral'],['grid','◉','Grid e transferências'],['drivers','♙','Pilotos e contratos'],['comparison','⇄','Comparar pilotos'],['performance','⌁','Desempenho'],['engines','⏣','Motores'],['records','♜','Records Hub'],['calendar','▦','Calendário'],['teams','⚑','Equipes e finanças'],['projects','⬡','Projetos e pesquisa'],['changes','↺','Alterações']];
+const pages = [['overview','◈','Visão geral'],['grid','◉','Grid e transferências'],['drivers','♙','Pilotos e contratos'],['comparison','⇄','Comparar pilotos'],['team-comparison','⌁','Comparar equipes'],['facilities','▤','Instalações'],['performance','⌁','Desempenho'],['engines','⏣','Motores'],['records','♜','Records Hub'],['calendar','▦','Calendário'],['teams','⚑','Equipes e finanças'],['projects','⬡','Projetos e pesquisa'],['changes','↺','Alterações']];
 const state = {page: 'overview', teams: [], drivers: [], team: Number(localStorage.getItem('f1-team')) || 3, driver: null, driverFilter: '', onlyGrid: false, driverSort: 'category', opponent: 4, all: true, metric: 'points', car: 1, generation: 0};
 const main = document.querySelector('#main');
 installFontControls();
@@ -44,7 +45,7 @@ async function refreshState() {
   document.querySelector('#undo').disabled = !session.meta.undo_available;
   document.querySelector('#export').disabled = false;
   document.querySelector('#export').textContent = session.meta.can_export_save ? '↓ Exportar novo save' : '↓ Exportar SQLite';
-  document.querySelector('#footer-info').textContent = `${session.meta.season} · ${session.meta.modded ? 'SECTOR33 DETECTADO' : 'BASE ORIGINAL'} · ${count} ALTERAÇÕES NA CÓPIA`;
+  document.querySelector('#footer-info').textContent = `${session.meta.season} · SAVE IMPORTADO · ${count} ALTERAÇÕES NA CÓPIA`;
 }
 
 async function navigate(page = state.page) {
@@ -73,7 +74,7 @@ function welcome() {
 const views = {
   async overview() {
     const team = currentTeam(), projects = await api(`/teams/${state.team}/projects`);
-    return heading(`COMMAND CENTER / ${session.meta.season}`, 'Seu grid, em detalhe.', 'Acompanhe a carreira e entre em qualquer equipe para explorar seus dados.', `<span class="badge accent">${session.meta.modded ? 'SECTOR33' : 'F1 MANAGER 24'}</span>`) +
+    return heading(`COMMAND CENTER / ${session.meta.season}`, 'Seu grid, em detalhe.', 'Acompanhe a carreira e entre em qualquer equipe para explorar seus dados.', `<span class="badge accent">SAVE IMPORTADO</span>`) +
       `<div class="kpis">${kpi('Equipe em foco',team.name, 'Clique em um cartão para trocar')}${kpi('Caixa disponível',money(team.Balance),'Saldo atual, não é teto de gastos')}${kpi('Campeonato',`P${team.Position ?? '—'} / ${team.Points ?? 0} pts`,'Classificação registrada no save')}${kpi('Desenvolvimento',projects.length,`${projects.filter(item=>item.kind==='Pesquisa').length} pesquisas para a próxima temporada`)}</div>` +
       `<div class="section-head"><h2>Current grid <span class="muted">/ ${session.meta.season}</span></h2><small>${state.teams.length} EQUIPES · DADOS DO SAVE</small></div><div class="team-grid">${state.teams.map(item => {
         const pair = state.drivers.filter(driver => driver.team?.TeamID === item.TeamID && driver.contract?.PosInTeam <= 2).sort((first, second) => first.contract.PosInTeam-second.contract.PosInTeam);
@@ -91,15 +92,15 @@ const views = {
   },
   async calendar() {
     const races = await api('/calendar');
-    return heading(`SEASON PLANNER / ${session.meta.season}`, 'Calendário da temporada', 'Veja as etapas e edite chuva e temperatura das próximas corridas.', `<span class="badge">${races.length} ETAPAS</span>`) + `<div class="calendar-grid">${races.map(race=>`<div class="race-card ${race.completed?'completed':''}"><span class="round">ROUND ${String(race.round).padStart(2,'0')}</span><span class="badge ${race.completed?'green':'accent'}">${race.completed?'CONCLUÍDO':race.WeekendType?'SPRINT':'GRAND PRIX'}</span><h3>${esc(race.track)}</h3><span class="date">${new Date(race.date+'T12:00:00').toLocaleDateString('pt-BR')} · ${race.Laps} voltas</span><div class="weather"><span>${race.WeatherStateRace>=8?'☂':'☀'} ${esc(weatherNames[race.WeatherStateRace]??'Variável')}</span><span>${number(race.TemperatureRace,1)} °C</span></div><button class="button ghost" data-race="${race.RaceID}" ${race.completed?'disabled':''}>${race.completed?'Etapa realizada':'Editar clima →'}</button></div>`).join('')}</div><div class="notice">A data é lida do contador de dias do jogo. Esta versão não remove, adiciona ou reordena etapas; preserva o calendário e as regras Sector33.</div>`;
+    return heading(`SEASON PLANNER / ${session.meta.season}`, 'Calendário da temporada', 'Veja as etapas e edite chuva e temperatura das próximas corridas.', `<span class="badge">${races.length} ETAPAS</span>`) + `<div class="calendar-grid">${races.map(race=>`<div class="race-card ${race.completed?'completed':''}"><span class="round">ROUND ${String(race.round).padStart(2,'0')}</span><span class="badge ${race.completed?'green':'accent'}">${race.completed?'CONCLUÍDO':race.WeekendType?'SPRINT':'GRAND PRIX'}</span><h3>${esc(race.track)}</h3><span class="date">${new Date(race.date+'T12:00:00').toLocaleDateString('pt-BR')} · ${race.Laps} voltas</span><div class="weather"><span>${race.WeatherStateRace>=8?'☂':'☀'} ${esc(weatherNames[race.WeatherStateRace]??'Variável')}</span><span>${number(race.TemperatureRace,1)} °C</span></div><button class="button ghost" data-race="${race.RaceID}" ${race.completed?'disabled':''}>${race.completed?'Etapa realizada':'Editar clima →'}</button></div>`).join('')}</div><div class="notice">A data é lida do contador de dias do jogo. Esta versão não remove, adiciona ou reordena etapas; preserva o calendário e as regras do save.</div>`;
   },
   async teams() {
     const team=currentTeam();
     return heading('TEAM MANAGEMENT', team.name, 'Finanças da equipe selecionada. O saldo não é o teto de gastos.') + `<div class="kpis">${kpi('Caixa atual',money(team.Balance),'Disponibilidade registrada no banco')}${kpi('Construtores',`P${team.Position}`,'Posição atual')}${kpi('Pontos',team.Points,'Classificação oficial')}${kpi('Equipe',team.code,'Identidade de apresentação')}</div><form id="finance-form" class="panel"><div class="panel-title"><h2>Editar caixa</h2><span class="badge accent">CÓPIA DE TRABALHO</span></div><div class="form-grid">${field('balance','Saldo ($)',team.Balance,'number','required step="1" min="-1000000000" max="10000000000"')}</div><div class="form-actions"><button class="button primary">Aplicar alteração</button><small>Não altera despesas históricas nem orçamento projetado.</small></div></form><div class="section-head"><h2>Classificação das equipes</h2></div>${table(['Posição','Equipe','Pontos','Caixa'],state.teams.map(item=>`<tr><td>P${item.Position}</td><td><span class="team-name" style="--color:${item.color}">${esc(item.name)}</span></td><td>${item.Points}</td><td>${money(item.Balance)}</td></tr>`))}`;
   },
   async projects() {
-    const [projects,expertise] = await Promise.all([api(`/teams/${state.team}/projects`), api(`/teams/${state.team}/expertise`)]);
-    return heading('DEVELOPMENT CENTER', 'Projetos e pesquisa', `${currentTeam().name} · acompanhe o trabalho atual e a expertise para a próxima temporada.`) + table(['Projeto','Peça','Tipo','Temporada','Trabalho','Custo registrado','CFD','Túnel'],projects.map(project=>`<tr><td>#${project.ProjectID}</td><td>${esc(project.part)}</td><td><span class="badge ${project.kind==='Pesquisa'?'accent':''}">${project.kind}</span></td><td>${project.ValidFrom}</td><td>${project.progress==null?'—':number(project.progress,1)+'%'}<div class="progress"><span style="width:${project.progress??0}%"></span></div></td><td>${money(project.DesignCost)}</td><td>${project.CFD}</td><td>${project.WindTunnelTime}</td></tr>`)) + `<div class="section-head"><h2>Expertise · atual e próxima temporada</h2><small>EDITE UM ATRIBUTO POR VEZ</small></div>` + table(['Peça','Atributo','Expertise atual','Próxima temporada',''],expertise.map(item=>`<tr><td>${esc(item.part)}</td><td>${esc(item.label)}</td><td>${number(item.Expertise,3)}</td><td>${number(item.NextSeasonExpertise,3)}</td><td><button class="button ghost" data-expertise="${item.PartType},${item.PartStat}">Editar</button></td></tr>`)) + '<div class="notice">Expertise não é o atributo da peça instalada. Alterá-la influencia desenvolvimento; não substitui automaticamente os designs existentes.</div>';
+    const projects = await api(`/teams/${state.team}/projects`);
+    return heading('DEVELOPMENT CENTER', 'Projetos e pesquisa', `${currentTeam().name} · acompanhe o trabalho atual e a expertise para a próxima temporada.`) + table(['Projeto','Peça','Tipo','Temporada','Trabalho','Custo registrado','CFD','Túnel'],projects.map(project=>`<tr><td>#${project.ProjectID}</td><td>${esc(project.part)}</td><td><span class="badge ${project.kind==='Pesquisa'?'accent':''}">${project.kind}</span></td><td>${project.ValidFrom}</td><td>${project.progress==null?'—':number(project.progress,1)+'%'}<div class="progress"><span style="width:${project.progress??0}%"></span></div></td><td>${money(project.DesignCost)}</td><td>${project.CFD}</td><td>${project.WindTunnelTime}</td></tr>`)) + await engineeringScreen.expertiseView();
   },
   async changes() {
     const changes=session.meta.changes;
@@ -112,27 +113,33 @@ const gridScreen = gridFeature(featureContext);
 const comparisonScreen = comparisonFeature(featureContext);
 const recordsScreen = recordsFeature(featureContext);
 const engineeringScreen = engineeringFeature(featureContext);
+const managementScreen = managementFeature(featureContext);
 const teamFinanceView = views.teams;
 Object.assign(views, {
   grid:gridScreen.view,
+  facilities:managementScreen.facilities,
+  'team-comparison':managementScreen.teamComparison,
   comparison:comparisonScreen.view,
   records:recordsScreen.view,
   engines:engineeringScreen.engines,
   performance:engineeringScreen.performance,
-  teams:async()=>await teamFinanceView()+await engineeringScreen.teamSupplier(),
+  teams:async()=>await teamFinanceView()+managementScreen.identityForm()+await engineeringScreen.teamSupplier(),
 });
 const featureBindings = {
   grid:gridScreen.bind,
+  facilities:managementScreen.bindFacilities,
+  'team-comparison':managementScreen.bindTeamComparison,
   comparison:comparisonScreen.bind,
   records:recordsScreen.bind,
   engines:engineeringScreen.bindEngines,
   performance:engineeringScreen.bindPerformance,
-  teams:engineeringScreen.bindSuppliers,
+  projects:engineeringScreen.bindExpertisePage,
+  teams:()=>{engineeringScreen.bindSuppliers();managementScreen.bindIdentity();},
 };
 
 function driverPanel(driver) {
   const color=driver.team?.color??'#ad9eec';
-  return `<div style="--team:${color}"><div class="driver-hero"><div><small>${esc(driver.team?.name??'SEM EQUIPE F1')} / DRIVER PROFILE</small><h2>${esc(driver.name)}</h2><p>Média simples dos atributos: <b>${number(driver.average,1)}</b> · não é o overall oficial do jogo</p></div><div class="number">${esc(driver.code_display)}</div></div><form id="driver-form"><div class="detail-grid"><div class="panel"><div class="panel-title"><h2>Atributos de pilotagem</h2><span class="badge">0–100</span></div><div class="stat-grid">${driver.stats.map(stat=>`<div class="stat-input"><label for="stat-${stat.StatID}">${esc(stat.label)}<input id="stat-${stat.StatID}" name="stat-${stat.StatID}" type="number" min="0" max="${Math.min(100,stat.Max)}" value="${stat.Val}" required></label><input type="range" data-range="stat-${stat.StatID}" min="0" max="${Math.min(100,stat.Max)}" value="${stat.Val}" aria-label="${esc(stat.label)}"></div>`).join('')}</div></div><div class="panel radar-panel"><h3>Perfil de pilotagem</h3>${radar(driver.stats)}<p>Atributos atuais. O radar é atualizado após aplicar a edição.</p></div></div><div class="panel" style="margin-top:18px"><div class="panel-title"><h2>Perfil do piloto</h2></div><div class="form-grid">${field('first_name','Nome',driver.first_name_display,'text','required maxlength="80"')}${field('last_name','Sobrenome',driver.last_name_display,'text','required maxlength="80"')}${field('aggression','Agressividade',driver.Aggression,'number','min="0" max="100" required')}${field('marketability','Valor de mercado',driver.Marketability,'number','min="0" max="100" required')}</div><div class="form-actions"><button class="button primary">Aplicar atributos e perfil</button><small>O original não será alterado.</small></div></div></form>${driver.contract?`<form id="contract-form" class="panel" style="margin-top:18px" data-contract="${driver.contract.contract_id}"><div class="panel-title"><h2>Contrato atual</h2><span class="badge">${esc(driver.team?.name??'OUTRA CATEGORIA')}</span></div><div class="form-grid">${field('salary','Salário anual ($)',driver.contract.Salary,'number','min="0" max="1000000000" required')}${field('end_season','Válido até',driver.contract.EndSeason,'number',`min="${session.meta.season}" max="2100" required`)}${field('race_bonus','Bônus por corrida ($)',driver.contract.RaceBonus,'number','min="0" max="100000000" required')}</div><div class="form-actions"><button class="button secondary">Aplicar contrato</button></div></form>`:''}<div class="section-head"><h2>Resultados · ${session.meta.season}</h2></div>${table(['Grande Prêmio','Largada','Chegada','Pontos','DNF'],driver.results.map(result=>`<tr><td>${esc(result.Name)}</td><td>${result.StartingPos}</td><td>${result.FinishingPos}</td><td>${result.Points}</td><td>${result.DNF?'Sim':'—'}</td></tr>`))}</div>`;
+  return `<div style="--team:${color}"><div class="driver-hero"><div><small>${esc(driver.team?.name??'SEM EQUIPE F1')} / DRIVER PROFILE</small><h2>${esc(driver.name)}</h2><p>Média simples dos atributos: <b>${number(driver.average,1)}</b> · não é o overall oficial do jogo</p></div><div class="number">${esc(driver.code_display)}</div></div><form id="driver-form"><div class="detail-grid"><div class="panel"><div class="panel-title"><h2>Atributos de pilotagem</h2><span class="badge">0–100</span></div><div class="stat-grid">${driver.stats.map(stat=>`<div class="stat-input"><label for="stat-${stat.StatID}">${esc(stat.label)}<input id="stat-${stat.StatID}" name="stat-${stat.StatID}" type="number" min="0" max="${Math.min(100,stat.Max)}" value="${stat.Val}" required></label><input type="range" data-range="stat-${stat.StatID}" min="0" max="${Math.min(100,stat.Max)}" value="${stat.Val}" aria-label="${esc(stat.label)}"></div>`).join('')}</div></div><div class="panel radar-panel"><h3>Perfil de pilotagem</h3>${radar(driver.stats)}<p>Atributos atuais. O radar é atualizado após aplicar a edição.</p></div></div><div class="panel" style="margin-top:18px"><div class="panel-title"><h2>Perfil do piloto</h2></div><div class="form-grid">${field('first_name','Nome',driver.first_name_display,'text','required maxlength="80"')}${field('last_name','Sobrenome',driver.last_name_display,'text','required maxlength="80"')}${field('aggression','Agressividade',driver.Aggression,'number','min="0" max="100" required')}${field('marketability','Valor de mercado',driver.Marketability,'number','min="0" max="100" required')}</div><div class="form-actions"><button class="button primary">Aplicar atributos e perfil</button><small>O original não será alterado.</small></div></div></form>${driver.contract?`<form id="contract-form" class="panel" style="margin-top:18px" data-contract="${driver.contract.contract_id}"><div class="panel-title"><h2>Contrato atual</h2><span class="badge">${esc(driver.team?.name??'OUTRA CATEGORIA')}</span></div><div class="form-grid">${field('salary','Salário anual ($)',driver.contract.Salary,'number','min="0" max="1000000000" required')}${field('end_season','Válido até',driver.contract.EndSeason,'number',`min="${session.meta.season}" max="9999" required`)}${field('race_bonus','Bônus por corrida ($)',driver.contract.RaceBonus,'number','min="0" max="100000000" required')}</div><div class="form-actions"><button class="button secondary">Aplicar contrato</button></div></form>`:''}<div class="section-head"><h2>Resultados · ${session.meta.season}</h2></div>${table(['Grande Prêmio','Largada','Chegada','Pontos','DNF'],driver.results.map(result=>`<tr><td>${esc(result.Name)}</td><td>${result.StartingPos}</td><td>${result.FinishingPos}</td><td>${result.Points}</td><td>${result.DNF?'Sim':'—'}</td></tr>`))}</div>`;
 }
 
 function bindPage() {
@@ -188,7 +195,7 @@ document.querySelector('#file').onchange=async event=>{
   const file=event.target.files[0];if(!file)return;
   if((pending||session.meta?.changes.length)&&!confirm('Abrir outro save? Exporte o save atual antes de sair para manter suas alterações em um arquivo.')){event.target.value='';return;}
   const data=new FormData();data.append('file',file);document.body.classList.add('busy');
-  try {const result=await request('/api/saves',{method:'POST',body:data});session.id=result.id;pending=false;state.driver=null;await refreshState();await navigate('overview');toast('Save carregado e validado. Original preservado.');}catch(error){toast(error.message,true);}finally{document.body.classList.remove('busy');event.target.value='';}
+  try {const result=await request('/api/saves',{method:'POST',body:data});session.id=result.id;state.gridYear=result.season;state.teamCompareSeason=result.season;state.compareTeamIds=null;pending=false;state.driver=null;await refreshState();await navigate('overview');toast('Save carregado e validado. Original preservado.');}catch(error){toast(error.message,true);}finally{document.body.classList.remove('busy');event.target.value='';}
 };
 document.querySelector('#undo').onclick=async()=>{try{await api('/undo',{method:'POST'});await refreshState();await navigate();toast('Última alteração desfeita.');}catch(error){toast(error.message,true);}};
 

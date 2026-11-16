@@ -1,4 +1,24 @@
 /* Horizontal shell: content uses the entire viewport width. */
+.engine-grid {grid-template-columns:repeat(auto-fit,minmax(min(100%,350px),1fr))}
+.engine-stat {grid-template-columns:minmax(0,1fr) 155px; align-items:center}
+.engine-stat>.number-stepper {width:155px; min-width:0}
+.engine-stat .number-stepper input {width:0; min-width:0; flex:1 1 0; padding:8px 3px}
+.engine-stat .number-stepper button {flex:0 0 36px}
+.engine-panel {min-width:0}
+.piece-bulk {display:flex; gap:6px; margin-top:8px}
+.piece-bulk button {width:36px; height:34px; border:1px solid #51475e; border-radius:5px; background:#302b3b; color:#dfcef8; font-size:22px; cursor:pointer}
+.piece-bulk button:hover {background:#514062}
+.facility-grid {display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,310px),1fr)); gap:16px}
+.facility-panel fieldset {border:0; padding:0; margin:16px 0 0; display:flex; flex-direction:column; gap:16px; min-width:0}
+.team-comparison-layout {display:grid; grid-template-columns:310px minmax(0,1fr); gap:18px; align-items:start}
+.team-comparison-layout>section {min-width:0}
+.team-picks {display:flex; flex-direction:column; gap:9px; margin:16px 0}
+.team-picks label {display:flex; align-items:center; gap:9px; cursor:pointer}
+.h2h-heading {display:flex; justify-content:space-between; gap:12px; border-top:1px solid var(--line); padding:16px 0; font-size:13px}
+.h2h-stat {padding:12px 0; border-top:1px solid var(--line); text-align:center; font-size:13px}
+.h2h-stat>div {display:flex; justify-content:space-between; margin-top:8px; font-size:20px}
+.chart .chart-annotation {font-size:15px; font-weight:800; paint-order:stroke; stroke:var(--panel); stroke-width:4px}
+@media(max-width:900px) {.team-comparison-layout {grid-template-columns:1fr}.team-picks {display:grid; grid-template-columns:repeat(2,minmax(0,1fr))}}
 .welcome-author {margin:24px auto 0; text-align:center}
 .welcome-author>small {color:var(--muted); font-size:12px}
 .welcome-author .author-links {justify-content:center; margin:8px 0 0; flex-wrap:wrap; font-size:14px}

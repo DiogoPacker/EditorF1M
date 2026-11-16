@@ -27,7 +27,7 @@ test('grid and lineups render all teams and contracts',{skip:!hasFixture},async(
   const ctx=context(),screen=gridFeature(ctx);
   const rows=await screen.view();
   assert.equal((rows.match(/class="roster-row"/g)||[]).length,11);
-  assert.ok(rows.includes('Racing Bulls')&&rows.includes('Cadillac'));
+  assert.ok(rows.includes('AlphaTauri')&&rows.includes('Cadillac'));
   assert.ok(rows.includes('data-edit-contract'));
   ctx.state.lineup=true;
   assert.equal(((await screen.view()).match(/class="lineup-card"/g)||[]).length,11);

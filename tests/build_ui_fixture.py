@@ -18,7 +18,8 @@ def build():
         client = TestClient(app)
         loaded = client.post("/api/saves", files={"file": ("save5.sav", save)}).json()
         prefix = "/api/saves/" + loaded["id"]
-        paths = ["", "/teams", "/drivers", "/grid?year=2026", "/grid?year=2027", "/compare/drivers?left=1&right=10", "/engines", "/records/seasons", "/records?season=2026", "/performance?car=1", "/performance/history?metric=overall", "/teams/3/fitted?car=1"]
+        season = loaded['season']
+        paths = ["", "/teams", "/drivers", f"/grid?year={season}", f"/grid?year={season+1}", "/compare/drivers?left=1&right=10", "/engines", "/records/seasons", f"/records?season={season}", "/performance?car=1", "/performance/history?metric=overall", "/teams/3/fitted?car=1", "/teams/3/facilities", "/teams/3/expertise-parts", f"/compare/teams?season={season}&metric=points"]
         fixture = {}
         for path in paths:
             response = client.get(prefix + path)

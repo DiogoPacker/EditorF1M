@@ -1,7 +1,7 @@
 from datetime import date, timedelta
 import re
 
-from teams import identity
+from .team_identity import describe
 
 
 DRIVER_LABELS = {"Cornering": "Curvas", "Braking": "Frenagem", "Control": "Controle", "Smoothness": "Suavidade", "Adaptability": "Adaptação", "Overtaking": "Ultrapassagem", "Defence": "Defesa", "Accuracy": "Precisão", "Reactions": "Reação", "Composure": "Compostura"}
@@ -21,7 +21,7 @@ def display_name(value):
 def teams(workspace):
     rows = workspace.rows("SELECT t.*,b.Balance,s.Points,s.Position FROM Teams t LEFT JOIN Finance_TeamBalance b USING(TeamID) LEFT JOIN Races_TeamStandings s ON s.TeamID=t.TeamID AND s.SeasonID=? WHERE t.Formula=1 ORDER BY s.Position", (workspace.season,))
     for row in rows:
-        row["name"], row["color"], row["code"] = identity(row["TeamID"], row["TeamName"], bool(row["IsCustomTeam"]))
+        row.update(describe(workspace, row))
     return rows
 
 
@@ -172,7 +172,7 @@ def car_performance(workspace, team_id, car=1, day=None):
     weights = {"top_speed": .15, "low": .2, "medium": .2, "high": .2, "dirty_air": .05, "tyres": .05, "cooling": .05, "drs": .1}
     overall = sum((metrics[key]["value"] - METRICS[key][3]) / (METRICS[key][4] - METRICS[key][3]) * weight * 100 for key, weight in weights.items())
     metrics["overall"] = {"label": "Índice geral estimado", "unit": "%", "value": round(overall, 3)}
-    return {"metrics": metrics, "parts": loadout, "missing": [], "method": "Estimativa do editor a partir das peças instaladas. Não inclui desgaste, acerto, pneus, combustível ou efeitos de corrida. Regras Sector33 preservadas; equivalência com a tela do jogo ainda não validada."}
+    return {"metrics": metrics, "parts": loadout, "missing": [], "method": "Estimativa do editor a partir das peças instaladas. Não inclui desgaste, acerto, pneus, combustível ou efeitos de corrida. Regras do save preservadas; equivalência com a tela do jogo ainda não validada."}
 
 
 def progression(workspace):

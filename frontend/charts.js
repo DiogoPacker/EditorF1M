@@ -1,6 +1,6 @@
 import {escape, number} from './api.js';
 
-export function lineChart(data, {selected = [], precision = 0, minimum, maximum} = {}) {
+export function lineChart(data, {selected = [], precision = 0, minimum, maximum, annotations = false} = {}) {
   const series = data.series.filter(item => !selected.length || selected.includes(item.id));
   const values = series.flatMap(item => item.values).filter(value => value != null);
   if (!values.length) return '<div class="notice">Sem histórico disponível para esta seleção.</div>';
@@ -32,6 +32,7 @@ export function lineChart(data, {selected = [], precision = 0, minimum, maximum}
       const point = [horizontal(index), vertical(value)];
       if (previous) svg += `<line x1="${previous[0]}" y1="${previous[1]}" x2="${point[0]}" y2="${point[1]}" stroke="${escape(item.color)}" stroke-width="2.5"/>`;
       svg += `<circle cx="${point[0]}" cy="${point[1]}" r="4" fill="${escape(item.color)}"><title>${escape(item.name)} · ${escape(data.labels[index])}: ${number(value, precision)}</title></circle>`;
+      if (annotations && !item.values.slice(index + 1).some(value=>value!=null)) svg += `<text x="${point[0]+7}" y="${point[1]-10}" fill="${escape(item.color)}" class="chart-annotation">${number(value, precision)}</text>`;
       previous = point;
     });
   }

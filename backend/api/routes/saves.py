@@ -4,6 +4,7 @@ from fastapi import APIRouter, HTTPException, UploadFile
 from fastapi.responses import Response
 from starlette.concurrency import run_in_threadpool
 from ..dependencies import store, workspace
+from ... import __version__
 router = APIRouter()
 
 def status(current):
@@ -12,7 +13,7 @@ def status(current):
 
 @router.get("/api/health", tags=["Sistema"])
 def health():
-    return {"status": "ok", "version": "0.6.0"}
+    return {"status": "ok", "version": __version__}
 
 
 @router.post("/api/saves", tags=["Save"], status_code=201)

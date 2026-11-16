@@ -34,3 +34,11 @@ Até 8 sessões permanecem abertas por processo. O desfazer tem limites de quant
 Testes unitários cobrem falha de persistência, falha de desfazer, limites e reabertura do checkpoint. Integrações com save real cobrem edição, contratos, peças e exportação sem incluir o save no repositório. Testes JavaScript cobrem ordenação, gráficos e hub de contratos.
 
 Mudanças estruturais preservam os endpoints HTTP existentes. A etapa seguinte para hospedagem é introduzir identidade e autorização por sessão, configuração de armazenamento e coordenação entre processos, antes de habilitar múltiplos workers.
+
+## Variações de saves e mods
+
+Os módulos de gestão verificam tabelas e colunas com infrastructure/schema.py. Nome e cor são consultados em Teams/Teams_Colours; não se resolve a marca pelo ID. O nome literal de localização tem precedência quando existe. Edição de identidade altera apenas os campos de banco compatíveis, não os assets externos do jogo.
+
+Instalações usam Buildings e Buildings_HQ para obter os níveis disponíveis. Trocas de nível respeitam tipo, requisitos e estado de obra; a conservação é convertida entre fração nativa e porcentagem da interface. Expertise usa lote por peça e temporada lógica. A interface faz os incrementos, e a API valida o lote inteiro antes de gravar.
+
+Motores usam perfis customizados quando o esquema é reconhecido; caso contrário, consultam fornecedores nativos e seus designs de referência. A criação e a alocação de perfis não são expostas como disponíveis no adaptador nativo. Conversões aerodinâmicas desconhecidas são marcadas como não editáveis; os agregados de desempenho continuam sendo estimativas do esquema conhecido, sem promessa de equivalência com todos os mods.

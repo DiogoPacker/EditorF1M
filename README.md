@@ -17,7 +17,11 @@ Desenvolvido por **Diogo Packer Elias** · [LinkedIn](https://www.linkedin.com/i
 - Atributos editáveis e comparação em linhas e radar.
 - Ordenação por categoria, média dos atributos ou nome.
 - Desempenho estimado do carro, evolução dos designs e edição das peças instaladas.
-- Perfis de motor e seleção de clientes em saves com suporte Sector33.
+- Valores decimais e controles por peça: melhorar/piorar em 10 pontos brutos por atributo, inclusive expertise atual e da próxima temporada.
+- Comparação de equipes em linhas: pontos com sprints, vitórias, pódios, poles e abandonos, seleção de equipes e anotações.
+- Instalações: níveis disponíveis e conservação, com validação de requisitos e proteção de obras em andamento.
+- Nome e cor principal das equipes lidos e editados no save, sem presets fixos por ID.
+- Fornecedores nativos ou perfis personalizados de motor, conforme as capacidades do arquivo importado.
 - Histórico de corridas e sprints, calendário, finanças, projetos e pesquisa.
 - Histórico de alterações, desfazer e exportação com verificação estrutural.
 - Menu horizontal, controles −/+ e tamanho de letras ajustável.
@@ -73,7 +77,6 @@ O desfazer mantém até **20 operações**, limitado também a **128 MiB de snap
 
 ```text
 app.py / run.py                 inicialização local
-teams.py                        identidade visual das equipes
 backend/
   main.py                       montagem do FastAPI, middleware e ciclo de vida
   api/
@@ -87,6 +90,7 @@ backend/
       parts.py                  projetos, peças e expertise
       editor.py                 transferências, academia, motores e records
       inspection.py             inspeção técnica de tabelas
+      management.py             identidade, instalações, expertise e comparação
   application/
     editing.py                  casos de uso de edição de campos
     services.py                 consultas e cálculos compartilhados
@@ -94,11 +98,16 @@ backend/
     engines.py                  perfis e clientes de motores
     car_editor.py               edição em lote de peças instaladas
     records.py                  histórico de corridas
+    team_identity.py            nomes e cores do arquivo importado
+    team_comparison.py          indicadores acumulados e confronto de equipes
+    facilities.py               instalações, níveis e conservação
+    expertise.py                consulta e edição da expertise por peça
   domain/
     errors.py                   erros independentes do HTTP
   infrastructure/
     codec.py                    GVAS, zlib, SQLite e verificação da exportação
     workspace.py                transações, snapshots e checkpoints
+    schema.py                   detecção de tabelas/colunas compatíveis
     repositories/
       edits.py                  persistência dos campos editáveis
   models.py                     entradas tipadas e limites Pydantic
@@ -166,8 +175,12 @@ Sem o save/fixture, testes dependentes desses dados são ignorados. A CI executa
 - O usuário confirmou carregamento de exportações no jogo; isso não garante todas as combinações de edição e mods. Preserve um backup.
 - Os atributos agregados do carro e sua evolução são **estimativas do editor**. O histórico usa designs concluídos antes de cada GP, não peças comprovadamente instaladas naquela corrida.
 - A média exibida para pilotos **não é o overall oficial**.
-- Racing Bulls, Audi e Cadillac são nomes de apresentação; os nomes originais do banco são preservados.
-- Motores personalizados dependem das tabelas Sector33 e não criam novas marcas nativas do jogo.
+- Nomes e cores vêm do arquivo. Um save que ainda contém AlphaTauri ou Alfa Romeo não é renomeado automaticamente; use **Equipes e finanças → Identidade da equipe**. Nomes e cores são gravados no banco, sem substituir logotipos ou pinturas empacotados no jogo.
+- A interface usa **Temporada atual** e **Próxima temporada**, resolvidas pelo estado do save, incluindo carreiras fictícias. Contratos e histórico continuam exibindo os valores reais quando necessário.
+- Motores nativos podem ter seus atributos editados sem tabelas de um mod específico. Criar perfis e trocar fornecedores exige tabelas de perfis compatíveis; a interface informa as opções disponíveis. Não são criadas marcas nativas automaticamente.
+- Compatibilidade é detectada por tabelas/colunas. Não existe garantia universal para todos os mods: formatos desconhecidos e conversões não reconhecidas são sinalizados, sem remover triggers ou inventar estruturas do jogo.
+- Nos botões por peça, **+ melhora e − piora**: cada clique move 10 pontos brutos nos limites 0–1000. Peso/durabilidade usa o sentido inverso, priorizando desempenho com possível perda de vida útil. Em unidades convertidas, o passo equivale a 10 pontos brutos. Os campos aceitam decimais e só são gravados ao aplicar.
+- **Instalações** faz edição direta, sem cobrar construção/reforma. Obras em andamento ficam bloqueadas. O editor usa os níveis definidos no save, sem assumir um teto fixo.
 - Academia sem limite fixo no editor não garante suporte ilimitado da interface ou dos mods do jogo.
 - O calendário permite editar clima/temperatura futuros; não adiciona nem reordena etapas.
 - Não há paridade completa com o Database Editor.

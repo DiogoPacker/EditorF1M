@@ -28,7 +28,7 @@ def test_all_screens_queries(client, loaded):
         response = client.get(f"/api/saves/{identity}{path}")
         assert response.status_code == 200, (path, response.text)
     names = {team["name"] for team in client.get(f"/api/saves/{identity}/teams").json()}
-    assert {"Audi", "Racing Bulls", "Cadillac"} <= names
+    assert {"Alfa Romeo Racing", "AlphaTauri", "Cadillac"} <= names
 
 
 def test_driver_edit_export_and_undo(client, loaded):

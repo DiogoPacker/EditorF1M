@@ -6,10 +6,11 @@ import asyncio
 from fastapi import FastAPI, Request
 from fastapi.responses import FileResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
+from . import __version__
 
 from .api.dependencies import store
 from .domain.errors import RecordNotFound
-from .api.routes import saves, drivers, teams, calendar, performance, parts, inspection, editor
+from .api.routes import saves, drivers, teams, calendar, performance, parts, inspection, editor, management
 
 
 @asynccontextmanager
@@ -20,11 +21,11 @@ async def lifespan(app):
         store.close()
 
 
-app = FastAPI(title="F1 Save Studio API", version="0.6.0", lifespan=lifespan, description="Editor local de F1 Manager 2024. GET consulta; PATCH edita a cópia; POST importa, desfaz e exporta. O original nunca é sobrescrito.")
+app = FastAPI(title="F1 Save Studio API", version=__version__, lifespan=lifespan, description="Editor local de F1 Manager 2024. GET consulta; PATCH edita a cópia; POST importa, desfaz e exporta. O original nunca é sobrescrito.")
 # A single process is required. Serialize session requests, including exports,
 # so a preview or read cannot observe half of another request's operation.
 session_request_lock = asyncio.Lock()
-for module in (saves, drivers, teams, calendar, performance, parts, inspection, editor):
+for module in (saves, drivers, teams, calendar, performance, parts, inspection, editor, management):
     app.include_router(module.router)
 STATIC = Path(__file__).resolve().parents[1] / "frontend"
 

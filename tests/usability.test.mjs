@@ -61,13 +61,13 @@ test('drag/drop dispatches to seat, academy and entry without applying an edit',
   }
 });
 
-test('integer piece input does not expose decimals or silently flag untouched precision',()=>{
+test('piece input preserves decimal precision until an attribute is changed',()=>{
   const stat={PartStat:9,Value:473.5,UnitValue:7.4706394,label:'Downforce',minimum_unit:6.9,maximum_unit:8.1};
   const part={DesignID:111,part:'Assoalho'};
   const html=pieceInput(stat,part);
-  assert.ok(html.includes('step="1"'));
-  assert.ok(html.includes('value="474"'));
-  assert.ok(html.includes('data-original="474"'));
+  assert.ok(html.includes('step="any"'));
+  assert.ok(html.includes('value="473.5"'));
+  assert.ok(html.includes('data-original="473.5"'));
   assert.ok(html.includes('min="0" max="1000"'));
   assert.ok(pieceInput(stat,part,'converted').includes('value="7.4706394"'));
   assert.equal(stat.Value,473.5);

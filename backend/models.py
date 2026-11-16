@@ -17,7 +17,7 @@ class DriverEdit(StrictModel):
 
 class ContractEdit(StrictModel):
     salary: int = Field(ge=0, le=1000000000)
-    end_season: int = Field(ge=2022, le=2100)
+    end_season: int = Field(ge=1, le=9999)
     race_bonus: int = Field(ge=0, le=100000000)
 
 
@@ -46,25 +46,25 @@ class TransferEdit(StrictModel):
     timing: Literal["now", "next"] = "now"
     displaced: Literal["release", "swap", "reserve"] = "release"
     salary: int = Field(ge=0, le=1000000000)
-    end_season: int = Field(ge=2022, le=2100)
+    end_season: int = Field(ge=1, le=9999)
     expected_outgoing: int | None = None
 
 
 class AcademyEdit(StrictModel):
     driver_id: int = Field(gt=0)
     salary: int = Field(ge=0, le=1000000000)
-    end_season: int = Field(ge=2022, le=2100)
+    end_season: int = Field(ge=1, le=9999)
     keep_feeder_seat: bool = True
     timing: Literal["now", "next"] = "now"
 
 
 class EngineEdit(StrictModel):
     name: str = Field(min_length=1, max_length=60, pattern=r".*\S.*")
-    power: float = Field(ge=80, le=100)
-    fuel: float = Field(ge=50, le=100)
-    durability: float = Field(ge=60, le=80)
-    ers: float = Field(ge=50, le=70)
-    gearbox: float = Field(ge=50, le=70)
+    power: float | None = Field(default=None, ge=0, le=100)
+    fuel: float | None = Field(default=None, ge=0, le=100)
+    durability: float | None = Field(default=None, ge=0, le=100)
+    ers: float | None = Field(default=None, ge=0, le=100)
+    gearbox: float | None = Field(default=None, ge=0, le=100)
 
 
 class EngineCreate(StrictModel):
@@ -85,3 +85,18 @@ class FittedStat(StrictModel):
 class FittedEdit(StrictModel):
     units: Literal["raw", "converted"] = "converted"
     stats: list[FittedStat] = Field(min_length=1, max_length=60)
+
+
+class TeamIdentityEdit(StrictModel):
+    name: str = Field(min_length=1, max_length=80)
+    color: str | None = Field(default=None, pattern=r"^#[0-9a-fA-F]{6}$")
+
+
+class FacilityEdit(StrictModel):
+    building_id: int = Field(ge=0)
+    condition: float = Field(ge=0, le=100)
+
+
+class ExpertiseBatch(StrictModel):
+    target: Literal["current", "next"] = "current"
+    stats: dict[int, float] = Field(min_length=1, max_length=30)

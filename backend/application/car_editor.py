@@ -7,8 +7,12 @@ def fitted(workspace, team_id, car):
         row["part"] = services.PART_LABELS[row["PartType"]]
         row["stats"] = services.part_stats(workspace, row["DesignID"])
         for stat in row["stats"]:
-            stat["minimum_unit"] = services.unit_value(stat["PartStat"], 0, row["PartType"])
-            stat["maximum_unit"] = services.unit_value(stat["PartStat"], 1000, row["PartType"])
+            try:
+                stat["minimum_unit"] = services.unit_value(stat["PartStat"], 0, row["PartType"])
+                stat["maximum_unit"] = services.unit_value(stat["PartStat"], 1000, row["PartType"])
+                stat["editable"] = True
+            except ValueError:
+                stat.update(minimum_unit=stat["UnitValue"], maximum_unit=stat["UnitValue"], editable=False)
         row["shared_cars"] = [value["LoadoutID"] for value in workspace.rows("SELECT LoadoutID FROM Parts_CarLoadout WHERE TeamID=? AND DesignID=?", (team_id, row["DesignID"]))]
     return {"team_id": team_id, "car": car, "parts": rows}
 
@@ -37,6 +41,8 @@ def edit_fitted(workspace, team_id, car, edit):
         stat = next((stat for stat in part["stats"] if stat["PartStat"] == item.stat_id), None)
         if not stat:
             raise ValueError("Atributo não encontrado nesta peça.")
+        if not stat.get("editable", True):
+            raise ValueError("A conversão deste atributo do mod não é reconhecida; edição indisponível.")
         raw = raw_from_unit(item.stat_id, item.value, part["PartType"]) if edit.units == "converted" else item.value
         if not 0 <= raw <= 1000:
             raise ValueError("Valor bruto deve ficar entre 0 e 1000.")
