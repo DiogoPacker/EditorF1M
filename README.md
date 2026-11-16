@@ -141,7 +141,7 @@ Consulte **/docs** para todas as rotas e campos. GET consulta; PATCH edita; POST
 ```powershell
 .\.venv\Scripts\python.exe -m pip install -r requirements-dev.txt
 .\.venv\Scripts\python.exe -m pytest -q
-node --test tests
+node scripts/test-frontend.mjs
 ```
 
 Para integrar com um save real, defina uma variável local. O arquivo indicado é apenas lido e os testes trabalham em cópias temporárias:
@@ -151,7 +151,7 @@ $env:F1_TEST_SAVE = 'C:\caminho\save.sav'
 .\.venv\Scripts\python.exe -m pytest -q
 $env:PYTHONPATH = '.'
 .\.venv\Scripts\python.exe tests/build_ui_fixture.py
-node --test tests
+node scripts/test-frontend.mjs
 ```
 
 Sem o save/fixture, testes dependentes desses dados são ignorados. A CI executa os testes independentes de arquivos privados. Os testes de componentes não substituem conferência visual ou validação dentro do jogo.
