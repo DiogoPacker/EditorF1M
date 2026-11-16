@@ -1,0 +1,53 @@
+/* Horizontal shell: content uses the entire viewport width. */
+.workspace footer {display:flex; flex-wrap:wrap; align-items:center; gap:12px}
+.author-links {display:flex; align-items:center; gap:12px; margin-left:auto; font-size:12px}
+.author-links a {display:inline-flex; padding:6px; border-radius:6px; color:var(--muted)}
+.author-links a:hover,.author-links a:focus-visible {color:var(--accent); background:var(--panel)}
+.author-links svg {width:22px; height:22px}
+.hub-contracts {display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:18px; margin-bottom:24px}
+.hub-contract {border:1px solid var(--line); border-radius:8px; padding:12px; margin:10px 0; display:flex; align-items:center; gap:12px; justify-content:space-between}
+.hub-contract span,.hub-contract small {display:block; margin-top:6px; color:var(--muted)}
+.hub-contract .button {flex-shrink:0}
+@media(max-width:700px) {.hub-contracts {grid-template-columns:1fr}.hub-contract {flex-wrap:wrap}}
+.sidebar.app-header {position:relative; inset:auto; width:100%; padding:14px 24px 0; display:grid; grid-template-columns:auto minmax(200px,1fr) auto; gap:12px 28px; border-right:0; border-bottom:1px solid var(--line)}
+.app-header .brand {padding:0; font-size:19px; align-self:center}
+.header-context {display:flex; align-items:center; justify-content:flex-end; gap:12px; min-width:0}
+.header-context label {font-size:12px; color:var(--muted); white-space:nowrap}
+.header-context #team-select {width:200px; margin:0; padding:9px 12px}
+.header-context #team-identity {margin:0; padding:0; border:0; max-width:250px; font-size:12px}
+.app-header .sidebar-bottom {position:static; margin:0; padding:0; border:0; align-self:center; font-size:11px}
+.app-header .sidebar-bottom small {display:none}
+.app-header .sidebar-bottom a {display:block; margin-top:4px}
+.app-header #navigation {grid-column:1/-1; display:flex; flex-direction:row; gap:4px; overflow-x:auto; margin:0; padding:4px 0 10px; scrollbar-width:thin}
+.app-header nav button {display:flex; align-items:center; flex:0 0 auto; width:auto; padding:10px 13px; margin:0; gap:8px; font-size:calc(13px * var(--font-scale)); white-space:nowrap}
+.app-header nav .nav-text {display:inline}
+.app-header nav .nav-icon {font-size:16px}
+.workspace {margin-left:0; width:100%; min-width:0}
+.workspace .topbar {position:relative; top:auto; min-height:64px; height:auto; padding:12px 24px; display:flex; flex-wrap:wrap; gap:12px}
+.workspace .topbar .breadcrumb {display:block}
+.top-actions {flex-wrap:wrap; justify-content:flex-end}
+.workspace main {width:100%; max-width:none; padding:24px}
+.workspace footer {padding:14px 24px}
+.comparison-layout {grid-template-columns:minmax(0,1fr) 250px}
+.attribute-comparison-chart {min-width:0}
+.attribute-comparison-chart .chart {display:block; width:100%; height:auto; max-height:none}
+.app-header .brand>span:not(.brand-icon) {display:block}
+.header-context #team-select {display:block}
+@media(max-width:1100px) {
+  .sidebar.app-header {grid-template-columns:auto 1fr}
+  .app-header .sidebar-bottom {display:none}
+  .header-context #team-identity {display:none}
+}
+@media(max-width:700px) {
+  .sidebar.app-header {padding:12px 12px 0; gap:12px}
+  .app-header .brand {font-size:15px}
+  .app-header .brand small {font-size:9px}
+  .header-context label {display:none}
+  .header-context #team-select {width:155px; max-width:100%}
+  .app-header nav button {padding:9px 11px}
+  .workspace .topbar {padding:10px 12px}
+  .workspace .topbar .breadcrumb {display:none}
+  .workspace main {padding:16px 12px}
+  .comparison-layout {grid-template-columns:minmax(0,1fr)}
+  .comparison-radar {max-width:250px; margin:auto}
+}

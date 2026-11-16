@@ -1,0 +1,174 @@
+:root {--font-scale:1; font-size:16px}
+body {font-size:calc(16px * var(--font-scale)); line-height:1.5}
+.sidebar {width:255px; padding:24px 16px}
+.workspace {margin-left:255px}
+.topbar {height:78px; padding:0 28px}
+main {padding:28px; max-width:2300px}
+.brand {font-size:20px; padding-bottom:22px}
+.brand small,.side-label {font-size:calc(11px * var(--font-scale))}
+.sidebar-bottom {font-size:calc(11px * var(--font-scale))}
+.sidebar-bottom small,.sidebar-bottom a {font-size:calc(12px * var(--font-scale))}
+nav button {font-size:calc(14px * var(--font-scale)); padding:12px; gap:10px}
+nav button .nav-icon {font-size:19px}
+.breadcrumb {font-size:calc(11px * var(--font-scale))}
+.breadcrumb b {font-size:calc(13px * var(--font-scale))}
+.button {font-size:calc(13px * var(--font-scale)); padding:11px 15px}
+.save-status {font-size:calc(12px * var(--font-scale))}
+h1 {font-size:calc(30px * var(--font-scale))}
+h2 {font-size:calc(20px * var(--font-scale))}
+h3 {font-size:calc(16px * var(--font-scale))}
+p,.page-head p {font-size:calc(14px * var(--font-scale))}
+.eyebrow {font-size:calc(11px * var(--font-scale))}
+input,select {font-size:calc(15px * var(--font-scale)); padding:11px 12px}
+.toolbar label,.filter-line,.form-field {font-size:calc(13px * var(--font-scale))}
+.badge,.section-head small {font-size:calc(11px * var(--font-scale))}
+.notice,.notice.compact {font-size:calc(13px * var(--font-scale)); padding:13px 15px}
+.kpi small {font-size:calc(12px * var(--font-scale))}
+.kpi strong {font-size:calc(28px * var(--font-scale))}
+.kpi span {font-size:calc(13px * var(--font-scale))}
+.team-card h3 {font-size:calc(20px * var(--font-scale))}
+.team-card .driver-pair,.team-card .card-stats {font-size:calc(13px * var(--font-scale))}
+.grid-workspace {grid-template-columns:280px minmax(0,1fr); gap:16px}
+.candidate-panel {padding:17px; position:sticky; top:100px}
+.candidate-list {max-height:60vh}
+.candidate {padding:12px; margin-bottom:8px; gap:5px}
+.candidate b {font-size:calc(14px * var(--font-scale))}
+.candidate span {font-size:calc(11px * var(--font-scale)); line-height:1.5}
+.candidate small {font-size:calc(14px * var(--font-scale))}
+.driver-group {font-size:calc(12px * var(--font-scale)); color:#c5b2e2; font-weight:800; margin:18px 0 9px; letter-spacing:.5px}
+.list-sort-label {display:flex; flex-direction:column; gap:6px; font-size:calc(12px * var(--font-scale)); color:var(--muted); margin:14px 0}
+.list-sort-label select {width:100%; font-size:calc(13px * var(--font-scale))}
+.list-sort-label>small {font-size:calc(11px * var(--font-scale)); line-height:1.5}
+.drop-instruction {font-size:calc(11px * var(--font-scale)); display:block; color:#aaa0ba; border:1px dashed #51455e; border-radius:5px; padding:10px}
+.roster-row {padding:14px; gap:12px; grid-template-columns:145px minmax(0,1fr)}
+.grid-team {font-size:calc(15px * var(--font-scale)); gap:12px}
+.team-emblem {font-size:13px; min-width:43px; padding:9px 6px}
+.seat {padding:10px; min-height:54px; min-width:0}
+.seat b {font-size:calc(15px * var(--font-scale))}
+.seat small {font-size:calc(11px * var(--font-scale))}
+.seat-contracts {margin-top:7px; flex-wrap:wrap}
+.seat-contracts button {font-size:calc(12px * var(--font-scale)); padding:4px 1px}
+.academy-toolbar {flex-wrap:wrap; margin-bottom:10px}
+.academy-toolbar>small {font-size:calc(11px * var(--font-scale))}
+.academy-toolbar>button {font-size:calc(12px * var(--font-scale)); padding:8px 10px}
+.reserves {flex-wrap:wrap; overflow:visible; gap:8px}
+.reserves button {font-size:calc(13px * var(--font-scale)); padding:9px 10px}
+.reserves small {font-size:calc(12px * var(--font-scale))}
+.academy-block {padding:12px; border:1px dashed #484150; border-radius:6px; min-height:85px}
+.academy-member .academy-remove {font-size:18px}
+.academy-member .academy-edit {font-size:16px}
+.contract-key,.grid-toolbar>small {font-size:calc(12px * var(--font-scale))}
+.segmented button {font-size:calc(13px * var(--font-scale)); padding:9px 13px}
+.split {grid-template-columns:280px minmax(0,1fr)}
+.split>section,.roster-list,.comparison-layout>* {min-width:0}
+.driver-row>span,.seat b {overflow-wrap:anywhere}
+.driver-row {padding:13px}
+.driver-row .driver-name {font-size:calc(14px * var(--font-scale))}
+.driver-row small {font-size:calc(12px * var(--font-scale)); line-height:1.4}
+.driver-row .rating {font-size:21px}
+.driver-hero small {font-size:calc(12px * var(--font-scale))}
+.driver-hero .number {font-size:40px; max-width:32%; overflow-wrap:anywhere}
+.stat-input label {font-size:calc(13px * var(--font-scale))}
+.stat-input input[type=number] {font-size:18px; width:75px}
+.form-actions small {font-size:calc(12px * var(--font-scale))}
+.comparison-sort {display:flex; align-items:center; gap:22px; margin-bottom:18px; flex-wrap:wrap}
+.comparison-sort .list-sort-label {min-width:300px; margin:0}
+.comparison-sort>small {font-size:calc(12px * var(--font-scale)); max-width:480px}
+.compare-selectors select {font-size:calc(15px * var(--font-scale))}
+.comparison-hero h2 {font-size:calc(27px * var(--font-scale))}
+.comparison-hero small {font-size:calc(12px * var(--font-scale))}
+.comparison-layout {grid-template-columns:minmax(0,1fr) 230px}
+.attribute-comparison-chart {min-width:0}
+.attribute-compare b {font-size:calc(14px * var(--font-scale))}
+.attribute-compare span {font-size:calc(20px * var(--font-scale))}
+.attribute-compare>small {font-size:calc(12px * var(--font-scale))}
+.chart text {font-size:14px}
+.chart-legend,.chart-legend span {font-size:calc(13px * var(--font-scale))}
+.radar text {font-size:11px}
+.rank-row {padding:17px 12px}
+.rank-row b {font-size:calc(13px * var(--font-scale))}
+.rank-row>small {font-size:calc(12px * var(--font-scale))}
+.performance-ranking>p {font-size:calc(12px * var(--font-scale))}
+.performance-workspace {grid-template-columns:270px minmax(0,1fr)}
+.part-title h3 {font-size:calc(15px * var(--font-scale))}
+.part-title>small {font-size:calc(11px * var(--font-scale))}
+.fitted-stat>span {font-size:calc(13px * var(--font-scale))}
+.fitted-stat small {font-size:calc(11px * var(--font-scale)); line-height:1.5}
+.fitted-stat input {width:96px; font-size:calc(18px * var(--font-scale)); padding:9px}
+.converted-value {color:#ada2bc!important}
+.engine-stat>span {font-size:calc(14px * var(--font-scale))}
+.engine-stat>input {font-size:calc(16px * var(--font-scale))}
+.engine-clients,.engine-panel .button {font-size:calc(12px * var(--font-scale))}
+.supplier-row>b,.supplier-row select,.supplier-row .button {font-size:calc(13px * var(--font-scale))}
+table {font-size:calc(14px * var(--font-scale))}
+th,.records-table th {font-size:calc(12px * var(--font-scale))}
+td {padding:13px 14px}
+.records-table td {font-size:calc(14px * var(--font-scale)); padding:12px}
+.records-table .sticky-driver {min-width:240px}
+.records-table .sticky-driver small,.sprint-result {font-size:calc(11px * var(--font-scale))}
+.race-card h3 {font-size:calc(20px * var(--font-scale))}
+.race-card .date,.race-card .weather {font-size:calc(13px * var(--font-scale))}
+.race-card .badge {font-size:calc(10px * var(--font-scale))}
+.change,.change small {font-size:calc(13px * var(--font-scale))}
+.font-controls {display:flex; gap:3px; flex-shrink:0}
+.font-controls button {background:#252030; border:1px solid #484052; color:#d5c1ee; padding:7px 9px; border-radius:4px; font-size:13px; font-weight:700}
+[data-drag-driver] {cursor:grab}
+[data-drag-driver]:active {cursor:grabbing}
+.dragging {opacity:.4}
+.drag-over {outline:3px solid #d3b6ff!important; outline-offset:3px; background:#41304f!important}
+.lineup-card {width:230px}
+.lineup-card .seat {min-height:40px; padding:6px}
+.lineup-card .seat b {font-size:calc(12px * var(--font-scale))}
+.lineup-card .seat small {font-size:calc(9px * var(--font-scale))}
+.lineup-card .grid-team {font-size:calc(12px * var(--font-scale))}
+.lineup-card .seat-contracts button {font-size:calc(10px * var(--font-scale))}
+@media(min-width:1800px) {
+  .roster-row {grid-template-columns:210px minmax(300px,1fr)}
+  .fitted-grid {grid-template-columns:repeat(3,minmax(0,1fr))}
+}
+@media(max-width:1450px) {
+  .comparison-layout {grid-template-columns:1fr}
+  .comparison-radar {max-width:240px; margin:auto}
+  .performance-workspace {grid-template-columns:235px minmax(0,1fr)}
+  .grid-workspace,.split {grid-template-columns:280px minmax(0,1fr)}
+  .roster-row {grid-template-columns:1fr}
+  .topbar .breadcrumb {display:none}
+  .topbar {justify-content:flex-end}
+}
+@media(max-width:1100px) {
+  .sidebar {width:220px; padding:20px 12px}
+  .workspace {margin-left:220px}
+  nav button {font-size:calc(13px * var(--font-scale)); padding:10px}
+  .grid-workspace,.split {grid-template-columns:240px minmax(0,1fr)}
+  .seat b {font-size:calc(13px * var(--font-scale))}
+  .performance-workspace {grid-template-columns:1fr}
+  .lineup-card {width:auto}
+  .topbar {padding:0 16px}
+  .top-actions {gap:6px}
+  .button {padding:10px}
+}
+@media(max-width:900px) {
+  .sidebar {width:72px; padding:20px 8px}
+  .workspace {margin-left:72px}
+  .grid-workspace,.split {grid-template-columns:1fr}
+  .candidate-panel {position:static}
+  .candidate-list,.driver-list {max-height:350px}
+  .save-status {display:none}
+  .fitted-grid {grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+.number-stepper {display:inline-flex; align-items:stretch; min-width:0; max-width:100%; border:1px solid #51475e; border-radius:7px; overflow:hidden; background:#19171f}
+.number-stepper input[type=number] {appearance:textfield; -moz-appearance:textfield; width:100%; min-width:48px; border:0; border-radius:0; text-align:center; margin:0}
+.number-stepper input::-webkit-inner-spin-button,.number-stepper input::-webkit-outer-spin-button {-webkit-appearance:none; margin:0}
+.number-stepper button {flex:0 0 36px; min-height:38px; border:0; background:#302b3b; color:#dfcef8; font-size:22px; cursor:pointer; padding:0}
+.number-stepper button:hover {background:#514062; color:white}
+.number-stepper button:focus-visible {outline:2px solid #c6a4ef; outline-offset:-3px}
+.number-stepper button:disabled {opacity:.4; cursor:default}
+.form-field>.number-stepper {display:flex; width:100%}
+.fitted-stat>.number-stepper {flex:0 0 155px}
+.fitted-stat .number-stepper input {width:75px; min-width:45px}
+@media(max-width:650px) {
+  main {padding:18px}
+  .font-controls {display:none}
+  .fitted-grid,.stat-grid,.seats {grid-template-columns:1fr}
+  .topbar {padding:0 10px}
+}
