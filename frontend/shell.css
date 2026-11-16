@@ -1,4 +1,7 @@
 /* Horizontal shell: content uses the entire viewport width. */
+.welcome-author {margin:24px auto 0; text-align:center}
+.welcome-author>small {color:var(--muted); font-size:12px}
+.welcome-author .author-links {justify-content:center; margin:8px 0 0; flex-wrap:wrap; font-size:14px}
 .workspace footer {display:flex; flex-wrap:wrap; align-items:center; gap:12px}
 .author-links {display:flex; align-items:center; gap:12px; margin-left:auto; font-size:12px}
 .author-links a {display:inline-flex; padding:6px; border-radius:6px; color:var(--muted)}

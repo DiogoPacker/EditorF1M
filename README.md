@@ -1,5 +1,9 @@
 # F1 Save Studio
 
+**[Acessar o editor online](https://editorf1m.onrender.com)**
+
+A primeira abertura pode levar alguns instantes enquanto o servidor gratuito inicia. Envie seu save, edite e exporte a nova cópia antes de encerrar; o armazenamento do servidor é temporário.
+
 Editor local de saves do **F1 Manager 2024**, com API FastAPI e interface web em português. Consulte sua carreira, planeje contratos e exporte uma nova cópia do save.
 
 Desenvolvido por **Diogo Packer Elias** · [LinkedIn](https://www.linkedin.com/in/diogo-packer-elias-11a3b7b6/) · [GitHub](https://github.com/DiogoPacker)
